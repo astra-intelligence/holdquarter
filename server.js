@@ -24,6 +24,20 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Health check (Render health check — no DB query so Neon can auto-suspend)
+app.get('/robots.txt', (_req, res) => {
+  res.type('text/plain').send(`User-agent: *
+Allow: /
+
+Sitemap: https://holdquarter.polsia.app/sitemap.xml`);
+});
+
+app.get('/sitemap.xml', (_req, res) => {
+  res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://holdquarter.polsia.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+</urlset>`);
+});
+
 app.get('/health', (_req, res) => res.json({ status: 'healthy' }));
 
 // Serve static files from public/ (index: false keeps / from hitting public/index.html)
