@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — HoldQuarter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.css">
+  <style>
+    body { margin: 0; background: var(--ivory); font-family: var(--font-body); }
+
+    /* Top bar */
+    .topbar {
+      background: var(--forest);
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-logo {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ivory);
+      text-decoration: none;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .topbar-email {
+      font-size: 14px;
+      color: rgba(249,246,239,0.7);
+    }
+    .topbar-btn {
+      font-size: 14px;
+      color: var(--gold);
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+    }
+    .topbar-btn:hover { color: var(--gold-light); }
+
+    /* Content */
+    .container { max-width: 1200px; margin: 0 auto; padding: 48px; }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+    .subhead {
+      font-size: 16px;
+      color: var(--text-mid);
+      margin-bottom: 48px;
+    }
+
+    /* Stat cards row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--forest);
+    }
+    .stat-sub {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(13,43,26,0.08);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--forest);
+      margin-top: 8px;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+      margin-bottom: 48px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+    .progress-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--forest);
+    }
+    .progress-pct {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--forest);
+    }
+    .progress-bar-bg {
+      height: 16px;
+      background: rgba(13,43,26,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--forest);
+      border-radius: 8px;
+      transition: width 0.6s ease;
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* Rate config */
+    .rate-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+      margin-bottom: 48px;
+    }
+    .rate-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+    .rate-desc {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+    .rate-presets {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .rate-preset {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(13,43,26,0.2);
+      background: none;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--forest);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .rate-preset:hover, .rate-preset.active {
+      background: var(--forest);
+      color: var(--ivory);
+      border-color: var(--forest);
+    }
+    .rate-display {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-top: 8px;
+    }
+    .rate-save-btn {
+      margin-top: 16px;
+      padding: 10px 28px;
+      background: var(--gold);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .rate-save-btn:hover { background: var(--gold-light); }
+    .rate-save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Transactions table */
+    .transactions-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--forest);
+      margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      padding: 0 0 12px;
+      border-bottom: 1px solid rgba(13,43,26,0.1);
+    }
+    td {
+      padding: 14px 0;
+      font-size: 14px;
+      color: var(--text-dark);
+      border-bottom: 1px solid rgba(13,43,26,0.06);
+    }
+    td.num { text-align: right; font-weight: 600; }
+    .amount-gross { color: var(--text-dark); }
+    .amount-withheld { color: var(--forest); }
+    .empty-row td { color: var(--text-light); font-style: italic; }
+
+    .quarterly-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .quarter-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(13,43,26,0.07);
+    }
+    .quarter-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    .quarter-withheld {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--forest);
+    }
+    .quarter-gross {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    /* Alert */
+    .notice {
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+    .notice strong { color: var(--forest); }
+
+    /* Stripe connect */
+    .stripe-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+      margin-bottom: 24px;
+    }
+    .stripe-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .stripe-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--forest); }
+    .stripe-badge { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .stripe-badge.connected { background: rgba(42,107,74,0.12); color: var(--forest); }
+    .stripe-badge.missing { background: rgba(180,40,40,0.08); color: #b42828; }
+    .stripe-desc { font-size: 14px; color: var(--text-mid); margin-bottom: 20px; line-height: 1.6; }
+    .stripe-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px;
+      background: #635bff; color: #fff; border: none; border-radius: 6px;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .stripe-btn:hover { background: #4a44cc; }
+    .stripe-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* IRS section */
+    .irs-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+      margin-bottom: 24px;
+    }
+    .irs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .irs-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--forest); }
+    .irs-meta { font-size: 13px; color: var(--text-mid); margin-bottom: 20px; }
+    .irs-deadline-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(201,168,76,0.08);
+      border: 1.5px solid rgba(201,168,76,0.25);
+      border-radius: 10px; padding: 20px 24px; margin-bottom: 20px;
+    }
+    .irs-deadline-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-light); margin-bottom: 4px; }
+    .irs-deadline-date { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--forest); }
+    .irs-deadline-amount { text-align: right; }
+    .irs-amount-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+    .irs-amount-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--forest); }
+    .auto-pay-row { display: flex; align-items: center; justify-content: space-between; }
+    .auto-pay-label { font-size: 14px; color: var(--text-dark); }
+    .auto-pay-sub { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(13,43,26,0.2); border-radius: 24px; transition: 0.2s; }
+    .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px;
+      left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+    input:checked + .toggle-slider { background: var(--forest); }
+    input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+    /* Interest section */
+    .interest-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      box-shadow: 0 2px 8px rgba(13,43,26,0.08);
+      margin-bottom: 24px;
+    }
+    .interest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; }
+    .interest-card { background: rgba(201,168,76,0.07); border-radius: 12px; padding: 20px; }
+    .interest-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-light); margin-bottom: 6px; }
+    .interest-value { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--forest); }
+    .interest-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+    .interest-note { font-size: 12px; color: var(--text-light); margin-top: 16px; line-height: 1.5; }
+
+    /* 1099 section */
+    .reports-section { background: var(--white); border-radius: var(--radius-lg);
+      padding: 28px 32px; box-shadow: 0 2px 8px rgba(13,43,26,0.08); margin-bottom: 24px; }
+    .reports-grid { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+    .report-btn { display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border: 1.5px solid rgba(13,43,26,0.2);
+      border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--forest);
+      text-decoration: none; background: none; cursor: pointer; font-family: inherit;
+      transition: all 0.15s; }
+    .report-btn:hover { background: var(--forest); color: var(--ivory); border-color: var(--forest); }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/" class="topbar-logo">Withholdly</a>
+    <div class="topbar-right">
+      <span class="topbar-email"><%= user.email %></span>
+      <a href="/auth/logout" class="topbar-btn">Sign out</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Your Withholding Dashboard</h1>
+    <p class="subhead">Q<%= currentQuarter.split('-Q')[1] %> <%= currentQuarter.split('-')[0] %> &nbsp;·&nbsp; Withholding rate: <%= rate %>%</p>
+
+    <% if (fundedPct >= 80) { %>
+    <div class="notice">
+      <strong>You're on track.</strong> At <%= fundedPct %>% funded, you have enough set aside for this quarter's estimated tax liability.
+    </div>
+    <% } else if (balance.gross > 0) { %>
+    <div class="notice">
+      With <strong><%= fundedPct %>% funded</strong>, consider increasing your withholding rate to avoid a surprise at tax time.
+    </div>
+    <% } %>
+
+    <!-- Stripe bank account -->
+    <div class="stripe-section">
+      <div class="stripe-header">
+        <div class="stripe-title">Bank Account for Payouts</div>
+        <span class="stripe-badge <%= stripeConnected ? 'connected' : 'missing' %>">
+          <%= stripeConnected ? '✓ Connected' : 'Not connected' %>
+        </span>
+      </div>
+      <p class="stripe-desc">
+        <% if (stripeConnected) { %>
+        Your bank account is connected via Stripe. Remainder payments (after withholding) are deposited automatically.
+        <% } else { %>
+        Connect your bank account so your net payments (after tax withholding) can be deposited directly. Withholdly uses Stripe for secure bank connections.
+        <% } %>
+      </p>
+      <% if (stripeKey) { %>
+      <button class="stripe-btn" id="stripe-connect-btn" <%= stripeConnected ? 'disabled' : '' %>>
+        <%= stripeConnected ? 'Bank account connected' : 'Connect bank account' %>
+      </button>
+      <% } else { %>
+      <p style="font-size:13px;color:var(--text-light)">Stripe is not configured for this deployment.</p>
+      <% } %>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Withheld This Quarter</div>
+        <div class="stat-value">$<%= parseFloat(balance.withheld).toLocaleString('en-US', {minimumFractionDigits: 2}) %></div>
+        <div class="stat-sub"><%= balance.transactions %> transaction<%= balance.transactions !== 1 ? 's' : '' %></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Gross Income This Quarter</div>
+        <div class="stat-value">$<%= parseFloat(balance.gross).toLocaleString('en-US', {minimumFractionDigits: 2}) %></div>
+        <div class="stat-sub">before withholding</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">IRS Liability Target</div>
+        <div class="stat-value">$<%= (parseFloat(balance.gross) * (rate / 100)).toLocaleString('en-US', {minimumFractionDigits: 2}) %></div>
+        <div class="stat-badge">at <%= rate %>% rate</div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <div class="progress-title">Quarterly Tax Funded</div>
+        <div class="progress-pct"><%= fundedPct %>%</div>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width: <%= fundedPct %>%"></div>
+      </div>
+      <div class="progress-labels">
+        <span>$<%= parseFloat(balance.withheld).toLocaleString('en-US', {minimumFractionDigits: 2}) %> withheld</span>
+        <span>$<%= (parseFloat(balance.gross) * (rate / 100)).toLocaleString('en-US', {minimumFractionDigits: 2}) %> target</span>
+      </div>
+    </div>
+
+    <!-- Interest earned -->
+    <div class="interest-section">
+      <div class="section-title">Interest on Escrowed Funds</div>
+      <p class="rate-desc" style="margin-bottom: 0;">Funds held in escrow earn quarterly interest through our FDIC-insured banking partner.</p>
+      <div class="interest-grid">
+        <div class="interest-card">
+          <div class="interest-label">This Quarter</div>
+          <div class="interest-value" id="interest-this-q">Loading…</div>
+          <div class="interest-sub">accrued to date</div>
+        </div>
+        <div class="interest-card">
+          <div class="interest-label">Year-to-Date</div>
+          <div class="interest-value" id="interest-ytd">Loading…</div>
+          <div class="interest-sub">total interest earned</div>
+        </div>
+      </div>
+      <p class="interest-note">Interest is paid quarterly and may be reportable on IRS Form 1099-INT if total annual interest ≥ $10. You'll receive the form by January 31 if applicable.</p>
+    </div>
+
+    <!-- IRS quarterly payment -->
+    <div class="irs-section">
+      <div class="irs-header">
+        <div class="irs-title">IRS Quarterly Estimated Tax</div>
+      </div>
+      <p class="irs-meta">Estimated tax payments are due quarterly. Withholdly helps you track what's been withheld and remits to the IRS on your schedule.</p>
+      <div class="irs-deadline-card">
+        <div>
+          <div class="irs-deadline-label">Next Quarterly Deadline</div>
+          <div class="irs-deadline-date" id="irs-deadline-date">Loading…</div>
+          <div class="interest-sub" style="margin-top: 4px;" id="irs-quarter-label"></div>
+        </div>
+        <div class="irs-deadline-amount">
+          <div class="irs-amount-label">Estimated amount due</div>
+          <div class="irs-amount-value" id="irs-amount">—</div>
+        </div>
+      </div>
+      <div class="auto-pay-row">
+        <div>
+          <div class="auto-pay-label">Auto-pay IRS</div>
+          <div class="auto-pay-sub">Automatically remit withheld funds to IRS on the quarterly deadline</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="auto-pay-toggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 1099 & reports -->
+    <div class="reports-section">
+      <div class="section-title">Tax Documents &amp; Reports</div>
+      <div class="reports-grid">
+        <a href="/api/reports/export" class="report-btn" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export CSV
+        </a>
+        <button class="report-btn" id="view-1099-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          View 1099-INT
+        </button>
+        <a href="/legal/tos" class="report-btn" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Terms of Service
+        </a>
+        <a href="/legal/privacy" class="report-btn" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+
+    <!-- Rate config -->
+    <div class="rate-section">
+      <div class="rate-title">Withholding Rate</div>
+      <div class="rate-desc">Your estimated effective tax rate. HoldQuarter withholds this percentage from every payment you receive.</div>
+      <div class="rate-presets">
+        <% const presets = [20, 25, 30, 35, 40]; %>
+        <% presets.forEach(p => { %>
+          <button class="rate-preset <%= p === rate ? 'active' : '' %>" data-rate="<%= p %>"><%= p %>%</button>
+        <% }) %>
+      </div>
+      <div class="rate-display">Current rate: <strong id="current-rate-display"><%= rate %>%</strong></div>
+      <input type="hidden" id="selected-rate" value="<%= rate %>">
+      <button class="rate-save-btn" id="save-rate-btn" disabled>Save Rate</button>
+    </div>
+
+    <!-- Quarterly history -->
+    <% if (quarterlyTotals.length > 0) { %>
+    <div class="quarterly-grid">
+      <% quarterlyTotals.forEach(q => { %>
+        <div class="quarter-card">
+          <div class="quarter-label"><%= q.quarter %></div>
+          <div class="quarter-withheld">$<%= parseFloat(q.total_withheld).toLocaleString('en-US', {minimumFractionDigits: 2}) %></div>
+          <div class="quarter-gross">on $<%= parseFloat(q.total_gross).toLocaleString('en-US', {minimumFractionDigits: 2}) %> gross</div>
+        </div>
+      <% }) %>
+    </div>
+    <% } %>
+
+    <!-- Transactions -->
+    <div class="transactions-section">
+      <div class="section-title">Recent Withholdings</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Payment ID</th>
+            <th>Gross</th>
+            <th>Withheld</th>
+            <th>Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentTransactions.length === 0) { %>
+            <tr class="empty-row">
+              <td colspan="5" style="text-align:center; padding: 32px 0;">No payments recorded yet. Set up your Stripe integration to start collecting.</td>
+            </tr>
+          <% } else { %>
+            <% recentTransactions.forEach(t => { %>
+              <tr>
+                <td><%= t.created_at.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) %></td>
+                <td style="font-family: monospace; font-size: 12px; color: var(--text-light);"><%= t.payment_id %></td>
+                <td class="num amount-gross">$<%= parseFloat(t.payment_amount).toLocaleString('en-US', {minimumFractionDigits: 2}) %></td>
+                <td class="num amount-withheld">$<%= parseFloat(t.withholding_amount).toLocaleString('en-US', {minimumFractionDigits: 2}) %></td>
+                <td><%= (parseFloat(t.withholding_rate) * 100).toFixed(1) %>%</td>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const userId = <%= user.id %>;
+    const presets = document.querySelectorAll('.rate-preset');
+    const saveBtn = document.getElementById('save-rate-btn');
+    const selectedInput = document.getElementById('selected-rate');
+    const display = document.getElementById('current-rate-display');
+
+    let selectedRate = parseInt(selectedInput.value);
+
+    presets.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presets.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRate = parseInt(btn.dataset.rate);
+        selectedInput.value = selectedRate;
+        saveBtn.disabled = false;
+        display.textContent = selectedRate + '% (unsaved)';
+      });
+    });
+
+    saveBtn.addEventListener('click', async () => {
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+      try {
+        const res = await fetch('/api/webhook/rate', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'x-user-id': userId },
+          body: JSON.stringify({ rate: selectedRate / 100 }),
+        });
+        if (!res.ok) throw new Error('Failed to save');
+        display.textContent = selectedRate + '%';
+        saveBtn.textContent = 'Saved!';
+        setTimeout(() => {
+          saveBtn.textContent = 'Save Rate';
+          saveBtn.disabled = true;
+        }, 1500);
+      } catch (e) {
+        saveBtn.textContent = 'Error — retry';
+        saveBtn.disabled = false;
+        display.textContent = '<%= rate %>%';
+      }
+    });
+
+    // Load interest & IRS data in parallel
+    (async () => {
+      const [interestRes, irsRes] = await Promise.all([
+        fetch('/api/reports/interest'),
+        fetch('/api/reports/irs'),
+      ]);
+      if (interestRes.ok) {
+        const d = await interestRes.json();
+        document.getElementById('interest-this-q').textContent = '$' + d.thisQuarter.toFixed(2);
+        document.getElementById('interest-ytd').textContent = '$' + d.ytd.toFixed(2);
+      }
+      if (irsRes.ok) {
+        const irs = await irsRes.json();
+        const dl = new Date(irs.nextDeadline);
+        document.getElementById('irs-deadline-date').textContent = dl.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        document.getElementById('irs-quarter-label').textContent = irs.nextIRSQuarter;
+        document.getElementById('irs-amount').textContent = '$' + irs.estimatedAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
+        document.getElementById('auto-pay-toggle').checked = irs.autoPayEnabled;
+      }
+    })();
+
+    // Auto-pay toggle
+    const autoPayToggle = document.getElementById('auto-pay-toggle');
+    if (autoPayToggle) {
+      autoPayToggle.addEventListener('change', async () => {
+        try {
+          const res = await fetch('/api/reports/irs/auto-pay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ enabled: autoPayToggle.checked }),
+          });
+          if (!res.ok) throw new Error('Failed');
+        } catch (e) {
+          autoPayToggle.checked = !autoPayToggle.checked; // revert
+        }
+      });
+    }
+
+    // 1099 modal
+    const view1099Btn = document.getElementById('view-1099-btn');
+    if (view1099Btn) {
+      view1099Btn.addEventListener('click', async () => {
+        const year = new Date().getFullYear() - 1;
+        try {
+          const res = await fetch('/api/reports/1099?year=' + year);
+          const d = await res.json();
+          const msg = d.reportable
+            ? `For tax year ${d.year}, you earned $${d.totalInterest.toFixed(2)} in interest on escrowed funds. A 1099-INT will be issued by January 31, ${d.year + 1}.`
+            : `For tax year ${d.year}, you earned $${d.totalInterest.toFixed(2)} in interest — below the $10 reporting threshold, so no 1099-INT is required.`;
+          alert(msg);
+        } catch (e) {
+          alert('Could not load 1099 data.');
+        }
+      });
+    }
+    const stripeBtn = document.getElementById('stripe-connect-btn');
+    if (stripeBtn) {
+      stripeBtn.addEventListener('click', async () => {
+        stripeBtn.disabled = true;
+        stripeBtn.textContent = 'Opening Stripe…';
+        try {
+          const r = await fetch('/dashboard/api/stripe-connect', { method: 'POST' });
+          const d = await r.json();
+          if (d.url) { window.location.href = d.url; }
+          else { throw new Error(d.error || 'No URL returned'); }
+        } catch (e) {
+          stripeBtn.textContent = 'Error — retry';
+          stripeBtn.disabled = false;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
